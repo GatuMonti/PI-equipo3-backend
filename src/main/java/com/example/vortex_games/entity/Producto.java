@@ -1,6 +1,9 @@
 package com.example.vortex_games.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
@@ -18,6 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Table(name="Products")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
 public class Producto {
     @Id
@@ -32,8 +36,7 @@ public class Producto {
     @Column(nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "product", fetch =FetchType.EAGER)
-    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Image> images=new HashSet<>();
 
 

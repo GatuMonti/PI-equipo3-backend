@@ -1,6 +1,8 @@
 package com.example.vortex_games.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,17 +20,11 @@ public class Image {
     private Long id;
 
     @NonNull
-    @Column(unique = true)
     private String imageUrl;
 
-    @NonNull
-    @ManyToOne
-    @JoinColumn(name="id_product",referencedColumnName = "id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private Producto product;
-
-
-
-
-
 
 }

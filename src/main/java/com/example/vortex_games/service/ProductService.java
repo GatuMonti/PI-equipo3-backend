@@ -1,7 +1,9 @@
 package com.example.vortex_games.service;
 
 
+import com.example.vortex_games.entity.Image;
 import com.example.vortex_games.entity.Producto;
+import com.example.vortex_games.repository.ImageRepository;
 import com.example.vortex_games.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,13 +13,15 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+   @Autowired
+   private ProductRepository productRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
 
     //Manual Methods
 
     public Producto addProduct(Producto producto){
+        System.out.println(producto);
+        producto.getImages().forEach(image -> image.setProduct(producto));
         return productRepository.save(producto);
     }
 
