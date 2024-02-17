@@ -1,6 +1,5 @@
 package com.example.vortex_games.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,14 +20,9 @@ public class Image {
     @Column(unique = true)
     private String imageUrl;
 
-    @NonNull
-    @ManyToOne
-    @JoinColumn(name="id_product",referencedColumnName = "id")
-    private Producto product;
 
-
-
-
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
+    private Product product;
 
 }

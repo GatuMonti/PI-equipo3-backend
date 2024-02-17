@@ -1,10 +1,8 @@
 package com.example.vortex_games.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import jakarta.persistence.Id;
 import lombok.*;
 
 import java.util.HashSet;
@@ -18,8 +16,9 @@ import java.util.Set;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Table(name="Products")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
-public class Producto {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,10 +29,13 @@ public class Producto {
 
     @NonNull
     @Column(nullable = false)
+    private String category;
+
+    @NonNull
+    @Column(nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "product", fetch =FetchType.EAGER)
-    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Image> images=new HashSet<>();
 
 
