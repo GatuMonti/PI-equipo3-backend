@@ -1,16 +1,19 @@
 package com.example.vortex_games.repository;
 
-import com.example.vortex_games.entity.Producto;
+
+import com.example.vortex_games.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
 @Repository
-public interface ProductRepository extends JpaRepository<Producto,Long> {
+public interface ProductRepository extends JpaRepository<Product,Long> {
 
-    Optional<Producto> findByName(String name);
+    Optional<Product> findByName(String name);
 
+    List<Product> findByCategory(String category);
 
 }

@@ -18,7 +18,7 @@ public class ImageController {
 
     @PostMapping("/add-Image")
     public void add(@RequestBody Image image){
-          imageService.addImage(image);
+        imageService.addImage(image);
     }
 
     @GetMapping("/list-images")
