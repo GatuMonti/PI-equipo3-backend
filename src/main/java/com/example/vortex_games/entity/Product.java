@@ -29,14 +29,24 @@ public class Product {
 
     @NonNull
     @Column(nullable = false)
-    private String category;
+    private String description;
 
     @NonNull
     @Column(nullable = false)
-    private String description;
+    private double price;
+
+    @NonNull
+    @Column(nullable = false)
+    private String type;
+
+    @NonNull
+    @Column(nullable = false)
+    private String console;
+
+    @NonNull
+    private String category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Image> images=new HashSet<>();
-
 
 }
