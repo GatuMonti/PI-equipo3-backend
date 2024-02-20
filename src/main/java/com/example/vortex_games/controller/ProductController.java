@@ -20,6 +20,7 @@ public class ProductController {
 
     @PostMapping("/add-product")
     public ResponseEntity<Product> add(@RequestBody Product producto) throws ExistingProductException {
+        System.out.println(producto.getName());
         Optional<Product> searchedProduct=productService.searchByName(producto.getName());
         if(searchedProduct.isPresent()){
             throw new ExistingProductException("The name is already in use");
