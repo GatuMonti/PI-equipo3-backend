@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 package com.example.vortex.gamex;
+=======
+package com.example.vortex_games;
+>>>>>>> main
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
