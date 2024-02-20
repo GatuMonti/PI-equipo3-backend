@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,13 +40,27 @@ public class ProductController {
 
     @GetMapping("/search-category/{category}")
     public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category){
-        if(productService.searchByCategory(category).size()>0){
-            return ResponseEntity.ok(productService.searchByCategory(category));
-        }
-        else{
-            return ResponseEntity.ok(productService.listProducts());
+        List<Product> products = productService.searchByCategory(category);
+
+        if (!products.isEmpty()) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.ok(Collections.emptyList());
         }
     }
+
+    @GetMapping("/search-consola/{consola}")
+    public ResponseEntity<List<Product>> getProductsByConsole(@PathVariable String consola){
+        System.out.println("esta llegando esto :"+consola);
+        List<Product> products = productService.searchByConsole(consola);
+        if (!products.isEmpty()) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+    }
+
+
 
     @GetMapping("/search-id/{id}")
     public ResponseEntity<Optional<Product>> getProductById(@PathVariable Long id){
