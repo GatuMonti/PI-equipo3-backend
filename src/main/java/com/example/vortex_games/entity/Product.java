@@ -35,6 +35,18 @@ public class Product {
     @Column(nullable = false)
     private String description;
 
+    @NonNull
+    @Column(nullable = false)
+    private double price;
+
+    @NonNull
+    @Column(nullable = false)
+    private String type;
+
+    @NonNull
+    @Column(nullable = false)
+    private String console;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Image> images=new HashSet<>();
 
