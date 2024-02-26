@@ -28,7 +28,7 @@ public class Product {
     private String name;
 
     @NonNull
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String category;
 
     @NonNull

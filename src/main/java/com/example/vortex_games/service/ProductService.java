@@ -40,4 +40,8 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
+    public void updateProduct(Product product){
+        productRepository.save(product);
+    }
+
 }
