@@ -73,4 +73,10 @@ public class ProductController {
         return new ResponseEntity<>("The product has been deleted", HttpStatus.OK);
     }
 
+    @PutMapping("/update-product")
+    public ResponseEntity<String> updateProduct(@RequestBody Product product){
+        productService.updateProduct(product);
+        return new ResponseEntity<>("product successfully updated", HttpStatus.OK);
+    }
+
 }
