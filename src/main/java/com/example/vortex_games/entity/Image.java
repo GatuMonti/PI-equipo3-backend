@@ -25,4 +25,8 @@ public class Image {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @OneToOne (fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
 }

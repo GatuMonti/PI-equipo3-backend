@@ -43,12 +43,32 @@ public class Product {
     @Column(nullable = false)
     private String type;
 
+
     @NonNull
     @Column(nullable = false)
     private String console;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Image> images=new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "producto_categoria",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories=new HashSet<>();
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "producto_caracteristicas",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "characteristic_id")
+    )
+    private Set<Characteristic> characteristics=new HashSet<>();
+
+
 
 
 }

@@ -1,0 +1,39 @@
+package com.example.vortex_games.entity;
+
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Table(name="characteristics")
+
+public class Characteristic {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NonNull
+    @Column(unique = true)
+    private String name;
+
+    @NonNull
+    @Column(nullable = false)
+    private String description;
+
+    @ManyToMany (mappedBy = "characteristics", fetch = FetchType.LAZY)
+    private Set<Product> products=new HashSet<>();
+
+
+
+
+
+}
