@@ -29,7 +29,11 @@ public class Product {
     private String name;
 
 
+<<<<<<< HEAD
     @ManyToOne( fetch = FetchType.EAGER)
+=======
+    @ManyToOne( cascade= CascadeType.MERGE ,fetch = FetchType.EAGER)
+>>>>>>> a760f4de5820a62807d96ef3d4610e3785e97a04
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -47,7 +51,6 @@ public class Product {
     @Column(nullable = false)
     private String type;
 
-
     @NonNull
     @Column(nullable = false)
     private String console;
@@ -63,8 +66,5 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "characteristic_id")
     )
     private Set<Characteristic> characteristics=new HashSet<>();
-
-
-
 
 }
