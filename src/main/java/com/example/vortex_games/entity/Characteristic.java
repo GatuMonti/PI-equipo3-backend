@@ -1,6 +1,7 @@
 package com.example.vortex_games.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,7 +31,9 @@ public class Characteristic {
     private String description;
 
     @ManyToMany (mappedBy = "characteristics", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Product> products=new HashSet<>();
+
 
 
 

@@ -1,6 +1,8 @@
 package com.example.vortex_games.controller;
 
+import com.example.vortex_games.entity.Category;
 import com.example.vortex_games.entity.Product;
+import com.example.vortex_games.exception.BadRequestException;
 import com.example.vortex_games.exception.ExistingProductException;
 import com.example.vortex_games.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +39,13 @@ public class ProductController {
     }
 
     @GetMapping("/search-category/{category}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category){
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category)  {
         if(productService.searchByCategory(category).size()>0){
             return ResponseEntity.ok(productService.searchByCategory(category));
         }
         else{
-            return ResponseEntity.ok(productService.listProducts());
+
+            return ResponseEntity.badRequest().build();
         }
     }
 
