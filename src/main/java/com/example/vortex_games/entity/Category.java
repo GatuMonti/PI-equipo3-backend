@@ -37,6 +37,7 @@ public class Category {
     private Image image;
 
     @OneToMany (mappedBy = "category")
+    @JsonIgnore
     private Set<Product> products=new HashSet<>();
 
 

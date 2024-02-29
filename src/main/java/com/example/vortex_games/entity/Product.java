@@ -29,9 +29,8 @@ public class Product {
     private String name;
 
 
-    @ManyToOne( cascade= CascadeType.MERGE ,fetch = FetchType.LAZY)
+    @ManyToOne( cascade= CascadeType.MERGE ,fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @JsonIgnore
     private Category category;
 
 
@@ -51,7 +50,6 @@ public class Product {
     @Column(nullable = false)
     private String type;
 
-
     @NonNull
     @Column(nullable = false)
     private String console;
@@ -67,8 +65,5 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "characteristic_id")
     )
     private Set<Characteristic> characteristics=new HashSet<>();
-
-
-
 
 }
