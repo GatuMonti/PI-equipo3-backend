@@ -25,11 +25,11 @@ public class Category {
     private Long id;
 
     @NonNull
-    @Column(unique = true)
+    @Column(unique = true , nullable = true)
     private String title;
 
     @NonNull
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String description;
 
     @OneToOne ( cascade=CascadeType.ALL, fetch = FetchType.EAGER)
@@ -37,6 +37,7 @@ public class Category {
     private Image image;
 
     @OneToMany (mappedBy = "category")
+    @JsonIgnore
     private Set<Product> products=new HashSet<>();
 
 

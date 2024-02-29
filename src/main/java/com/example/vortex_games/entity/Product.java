@@ -29,15 +29,11 @@ public class Product {
     private String name;
 
 
-    @ManyToOne( cascade= CascadeType.MERGE ,fetch = FetchType.LAZY)
+    @ManyToOne( fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @JsonIgnore
     private Category category;
 
 
-    //@NonNull
-    //@Column(nullable = true)
-    //private String category;
 
     @NonNull
     @Column(nullable = false)
