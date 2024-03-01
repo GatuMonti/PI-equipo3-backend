@@ -26,8 +26,8 @@ public class Characteristic {
     @Column(unique = true)
     private String name;
 
-    @NonNull
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private String description;
 
     @ManyToMany (mappedBy = "characteristics", fetch = FetchType.LAZY)

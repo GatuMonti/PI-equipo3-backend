@@ -16,6 +16,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @RequiredArgsConstructor
 @Table(name="categories")
 
@@ -32,21 +33,13 @@ public class Category {
     @Column(nullable = true)
     private String description;
 
-    @OneToOne ( cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne ( cascade={CascadeType.ALL} ,fetch = FetchType.EAGER)
     @JoinColumn(name = "image_id")
     private Image image;
 
     @OneToMany (mappedBy = "category")
     @JsonIgnore
     private Set<Product> products=new HashSet<>();
-
-
-
-
-
-
-
-
 
 
 

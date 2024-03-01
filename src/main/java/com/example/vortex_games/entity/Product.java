@@ -16,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
+@ToString
 @Table(name="Products")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
@@ -29,11 +30,8 @@ public class Product {
     private String name;
 
 
-<<<<<<< HEAD
+
     @ManyToOne( fetch = FetchType.EAGER)
-=======
-    @ManyToOne( cascade= CascadeType.MERGE ,fetch = FetchType.EAGER)
->>>>>>> a760f4de5820a62807d96ef3d4610e3785e97a04
     @JoinColumn(name = "category_id")
     private Category category;
 

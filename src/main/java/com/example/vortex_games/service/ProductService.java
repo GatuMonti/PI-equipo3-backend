@@ -5,6 +5,8 @@ import com.example.vortex_games.entity.Category;
 import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.repository.CategoryRepository;
 import com.example.vortex_games.repository.ProductRepository;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 public class ProductService {
     @Autowired
@@ -24,7 +27,20 @@ public class ProductService {
     //Manual Methods
 
     public Product addProduct(Product producto){
-        System.out.println(producto);
+        log.info(producto);
+        if(producto.getCategory().getId()==null){
+            Category categoriaVacia=new Category("Sin categoria","Producto sin categoria");
+            Optional<Category> categoriaEncontrada=categoryRepository.findByTitle(categoriaVacia.getTitle());
+            if(categoriaEncontrada.isEmpty()){
+                categoriaVacia=categoryRepository.save(categoriaVacia);
+                producto.setCategory(categoriaVacia);
+            }
+            else{
+                producto.setCategory(categoriaEncontrada.get());
+            }
+
+        }
+
         producto.getImages().forEach(image -> image.setProduct(producto));
         return productRepository.save(producto);
     }
