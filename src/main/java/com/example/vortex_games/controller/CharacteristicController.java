@@ -50,7 +50,7 @@ public class CharacteristicController {
         }
     }
 
-    @DeleteMapping("/delete")//<<----- Elimina una caracteristica de la base de datos
+    @DeleteMapping("/delete")//<<----- Elimina una caracteristica de la base de datos pasandole la caracteristica completa
     public ResponseEntity<String> remove(@RequestBody Characteristic characteristic) throws ResourceNotFoundException {
         Optional<Characteristic> characteristicSearched = characteristicService.searchByName(characteristic.getName());
         if(characteristicSearched.isPresent()){
@@ -61,6 +61,19 @@ public class CharacteristicController {
         }
 
     }
+    @DeleteMapping("/delete/{id}")//<<----- Elimina una caracteristica de la base de datos solo por id
+    public ResponseEntity<String> removeById(@PathVariable Long id) throws ResourceNotFoundException {
+        Optional<Characteristic> characteristicSearched = characteristicService.searchById(id);
+        if(characteristicSearched.isPresent()){
+            characteristicService.deleteCharacteristic(characteristicSearched.get());
+            return ResponseEntity.ok("Se elimino correctamente la caracteristica");
+        }else{
+            throw new ResourceNotFoundException("No existe una caracteristica en el sistema con esos datos para ser borrada");
+        }
+
+    }
+
+
 
     @PutMapping("/update")//<<------ Actualizar la caracteriztica en cuestion
     public ResponseEntity<String> update(@RequestBody Characteristic characteristic) throws ResourceNotFoundException{

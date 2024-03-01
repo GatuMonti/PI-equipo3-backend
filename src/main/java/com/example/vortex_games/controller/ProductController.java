@@ -1,9 +1,11 @@
 package com.example.vortex_games.controller;
 
 import com.example.vortex_games.entity.Category;
+import com.example.vortex_games.entity.Characteristic;
 import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.exception.BadRequestException;
 import com.example.vortex_games.exception.ExistingProductException;
+import com.example.vortex_games.exception.ResourceNotFoundException;
 import com.example.vortex_games.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +46,6 @@ public class ProductController {
             return ResponseEntity.ok(productService.searchByCategory(category));
         }
         else{
-
             return ResponseEntity.badRequest().build();
         }
     }
@@ -54,6 +55,16 @@ public class ProductController {
         return ResponseEntity.ok(productService.searchById(id));
     }
 
+    @GetMapping("/search-caracteristic/{characteristic}")
+    public ResponseEntity<List<Product>> getProductByCharacteristic(@PathVariable String characteristic) throws ResourceNotFoundException {
+        List<Product> productos = productService.searchByCharacteristic(characteristic);
+        if(productos.size()>0){
+            return ResponseEntity.ok(productos);
+        }else{
+            throw new ResourceNotFoundException("No hay productos asociados a esa caracteristica");
+        }
+    }
+
     @DeleteMapping("/delete-product/{id}")
     public ResponseEntity<String> deleteProducts(@PathVariable Long id){
         productService.deleteProduct(id);
@@ -61,9 +72,15 @@ public class ProductController {
     }
 
     @PutMapping("/update-product")
-    public ResponseEntity<String> updateProduct(@RequestBody Product product){
-        productService.updateProduct(product);
-        return new ResponseEntity<>("product successfully updated", HttpStatus.OK);
+    public ResponseEntity<String> updateProduct(@RequestBody Product product) throws ResourceNotFoundException {
+        Optional<Product> productoBuscado = productService.searchById(product.getId());
+        if(productoBuscado.isPresent()){
+            productService.updateProduct(product);
+            return new ResponseEntity<>("product successfully updated", HttpStatus.OK);
+        }else{
+            throw new ResourceNotFoundException("No existe un producto con el id indicado");
+        }
+
     }
 
 }
