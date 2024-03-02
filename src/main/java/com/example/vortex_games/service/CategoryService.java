@@ -46,6 +46,21 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+
+    public void deleteCategoryWHitProducts(Category category){
+        Category categoriaVacia=new Category("Sin categoria","Producto sin categoria");
+        for (Product product : category.getProducts()) {
+            Optional<Category> categoriaEncontrada=categoryRepository.findByTitle(categoriaVacia.getTitle());
+            if(categoriaEncontrada.isEmpty()){
+                categoriaEncontrada=Optional.of(categoryRepository.save(categoriaVacia));
+            }
+            product.setCategory(categoriaEncontrada.get());
+
+        }
+        imageRepository.delete(category.getImage());
+        categoryRepository.delete(category);
+    }
+
 }
 
 

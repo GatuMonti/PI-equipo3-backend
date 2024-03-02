@@ -4,6 +4,7 @@ import com.example.vortex_games.entity.Category;
 import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.exception.BadRequestException;
 import com.example.vortex_games.exception.ExistingProductException;
+import com.example.vortex_games.exception.ResourceNotFoundException;
 import com.example.vortex_games.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,16 @@ public class ProductController {
     public ResponseEntity<String> updateProduct(@RequestBody Product product){
         productService.updateProduct(product);
         return new ResponseEntity<>("product successfully updated", HttpStatus.OK);
+    }
+
+    @GetMapping("/search-caracteristic/{characteristic}")
+    public ResponseEntity<List<Product>> getProductByCharacteristic(@PathVariable String characteristic) throws ResourceNotFoundException {
+        List<Product> productos = productService.searchByCharacteristic(characteristic);
+        if(productos.size()>0){
+            return ResponseEntity.ok(productos);
+        }else{
+            throw new ResourceNotFoundException("No hay productos asociados a esa caracteristica");
+        }
     }
 
 }

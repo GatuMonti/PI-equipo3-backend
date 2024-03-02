@@ -2,8 +2,10 @@ package com.example.vortex_games.service;
 
 
 import com.example.vortex_games.entity.Category;
+import com.example.vortex_games.entity.Characteristic;
 import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.repository.CategoryRepository;
+import com.example.vortex_games.repository.CharacteristicRepository;
 import com.example.vortex_games.repository.ProductRepository;
 import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +24,9 @@ public class ProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private CharacteristicRepository characteristicRepository;
 
 
     //Manual Methods
@@ -67,6 +72,19 @@ public class ProductService {
     public void updateProduct(Product product){
         productRepository.deleteById(product.getId());
         this.addProduct(product);
+    }
+
+    public List<Product> searchByCharacteristic(String characteristic){
+        Characteristic characteristicEncontrada = characteristicRepository.findByName(characteristic).get();
+        List<Product> productos = new ArrayList<>();
+        for(Product product: productRepository.findAll()){
+            for(Characteristic characteristic1: product.getCharacteristics()){
+                if(characteristic1.equals(characteristicEncontrada)){
+                    productos.add(product);
+                }
+            }
+        }
+        return productos;
     }
 
 }
