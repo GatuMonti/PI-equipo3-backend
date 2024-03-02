@@ -55,6 +55,10 @@ public class ProductService {
          return productRepository.findByCategory(categoriaEncontrada);
     }
 
+    public List<Product> searchByConsole(String console) {
+        System.out.println("se esta buscando Play Station 4");
+        System.out.println(productRepository.findByConsole("Play Station 4"));
+        return productRepository.findByConsole(console);}
     public Optional<Product> searchById(Long id){
         return productRepository.findById(id);
     }
