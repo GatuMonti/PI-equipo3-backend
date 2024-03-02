@@ -1,5 +1,7 @@
 package com.example.vortex_games.auth;
 
+import com.example.vortex_games.exception.ExistingProductException;
+import com.example.vortex_games.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
@@ -19,5 +21,10 @@ public class AuthController {
     @PostMapping(value = "register")
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PutMapping (value = "changeRol")
+    public ResponseEntity<?> changeRol(@RequestBody User user)  {
+        return ResponseEntity.ok(authService.changeRole(user));
     }
 }

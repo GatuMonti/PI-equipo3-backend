@@ -4,12 +4,14 @@ import com.example.vortex_games.config.jwt.JwtService;
 import com.example.vortex_games.user.Role;
 import com.example.vortex_games.user.User;
 import com.example.vortex_games.user.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,4 +45,14 @@ public class AuthService {
                 .token(jwtService.getToken(user))
                 .build();
     }
-}
+
+    public Optional<User> changeRole (User user) {
+
+        if (user.getRole() == Role.ADMIN ||
+                user.getRole() == Role.USER) {
+            userRepository.save(user);
+
+        }
+        return userRepository.findByUsername(user.getUsername());
+    }
+    }
