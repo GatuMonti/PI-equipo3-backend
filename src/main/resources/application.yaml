@@ -1,4 +1,4 @@
 db:
-  url: jdbc:mysql://localhost:3306/vortex
+  url: jdbc:mysql://root:E2-3HaF6Fc-c4GDeh--faA42D113CAa3@monorail.proxy.rlwy.net:56791/vortex
   username: root
-  password: root
+  password: E2-3HaF6Fc-c4GDeh--faA42D113CAa3
