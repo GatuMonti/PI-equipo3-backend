@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ public class ProductController {
 
     @PostMapping("/add-product")
     public ResponseEntity<Product> add(@RequestBody Product producto) throws ExistingProductException {
+        System.out.println(producto.getName());
         Optional<Product> searchedProduct=productService.searchByName(producto.getName());
         if(searchedProduct.isPresent()){
             throw new ExistingProductException("The name is already in use");
@@ -40,6 +42,7 @@ public class ProductController {
     }
 
     @GetMapping("/search-category/{category}")
+<<<<<<< HEAD
     public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category)  {
         if(productService.searchByCategory(category).size()>0){
             return ResponseEntity.ok(productService.searchByCategory(category));
@@ -47,8 +50,30 @@ public class ProductController {
         else{
 
             return ResponseEntity.badRequest().build();
+=======
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String category){
+        List<Product> products = productService.searchByCategory(category);
+
+        if (!products.isEmpty()) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.ok(Collections.emptyList());
+>>>>>>> guille
         }
     }
+
+    @GetMapping("/search-consola/{consola}")
+    public ResponseEntity<List<Product>> getProductsByConsole(@PathVariable String consola){
+        System.out.println("esta llegando esto :"+consola);
+        List<Product> products = productService.searchByConsole(consola);
+        if (!products.isEmpty()) {
+            return ResponseEntity.ok(products);
+        } else {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+    }
+
+
 
     @GetMapping("/search-id/{id}")
     public ResponseEntity<Optional<Product>> getProductById(@PathVariable Long id){
