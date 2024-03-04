@@ -2,6 +2,7 @@ package com.example.vortex_games.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @RequiredArgsConstructor
 @Table(name="categories")
 
@@ -24,27 +26,20 @@ public class Category {
     private Long id;
 
     @NonNull
-    @Column(unique = true)
+    @Column(unique = true , nullable = true)
     private String title;
 
     @NonNull
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String description;
 
-    @OneToOne (fetch = FetchType.EAGER)
+    @OneToOne ( cascade={CascadeType.ALL} ,fetch = FetchType.EAGER)
     @JoinColumn(name = "image_id")
     private Image image;
 
-    @ManyToMany (mappedBy = "categories", fetch = FetchType.LAZY)
+    @OneToMany (mappedBy = "category")
+    @JsonIgnore
     private Set<Product> products=new HashSet<>();
-
-
-
-
-
-
-
-
 
 
 
