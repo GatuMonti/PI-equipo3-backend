@@ -32,7 +32,7 @@ public class JwtService {
                 .claim("userId", user.getId())
                 .claim("role", user.getRole())
                 .subject(user.getUsername()) //Tengo que guardar si o si así el usuario porque si no
-                //spring security no lo detecta y da error a querer extraer info con ese token.
+        //spring security no lo detecta y da error a querer extraer info con ese token.
                 .claim("nombre", user.getNombre())
                 .claim("apellido", user.getApellido())
                 .issuedAt(new Date(System.currentTimeMillis()))

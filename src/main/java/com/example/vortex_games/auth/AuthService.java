@@ -4,7 +4,6 @@ import com.example.vortex_games.config.jwt.JwtService;
 import com.example.vortex_games.user.Role;
 import com.example.vortex_games.user.User;
 import com.example.vortex_games.user.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
