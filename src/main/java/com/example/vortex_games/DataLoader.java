@@ -39,5 +39,6 @@ public class DataLoader implements ApplicationRunner {
             userRepository.save(new User(2,"user", password2, "user", "user", "userDir", Role.USER));
         }
 
+
     }
 }
