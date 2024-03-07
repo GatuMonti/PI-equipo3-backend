@@ -4,11 +4,14 @@ import com.example.vortex_games.exception.ExistingProductException;
 import com.example.vortex_games.exception.ResourceNotFoundException;
 import com.example.vortex_games.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,8 +30,13 @@ public class AuthController {
     }
 
     @PutMapping (value = "changeRol")
-    public ResponseEntity<?> changeRol(@RequestBody User user)  {
-        return ResponseEntity.ok(authService.changeRole(user));
+    public ResponseEntity<Optional<User>> changeRol(@RequestBody User user)  throws ResourceNotFoundException {
+        String usernameAdmin = user.getUsername();
+        if (!usernameAdmin.equals("ADMIN")) {
+            return ResponseEntity.ok(authService.changeRole(user));
+        } else {
+            throw new ResourceNotFoundException("No se puede cambiar el rol del usuario Admin");
+        }
     }
 
     @GetMapping(value = "listar-usuarios")

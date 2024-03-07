@@ -70,15 +70,17 @@ public class AuthService {
 
     public Optional<User> changeRole(User userRequest) {
         Optional<User> optionalUser = userRepository.findByUsername(userRequest.getUsername());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setRole(userRequest.getRole());
-            userRepository.save(user);
-            return Optional.of(user);
-        } else {
-            // Manejar el caso en que el usuario no existe
-            return Optional.empty();
-        }
+
+            if (optionalUser.isPresent()){
+                User user = optionalUser.get();
+                user.setRole(userRequest.getRole());
+                userRepository.save(user);
+                return Optional.of(user);
+
+            } else {
+                // Manejar el caso en que el usuario no existe
+                return Optional.empty();
+            }
     }
 
     public List<User> listUsers(){return userRepository.findAll();}
