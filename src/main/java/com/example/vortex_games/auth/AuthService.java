@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -67,13 +68,18 @@ public class AuthService {
                 .build();
     }
 
-    public Optional<User> changeRole (User user) {
-
-        if (user.getRole() == Role.ADMIN ||
-                user.getRole() == Role.USER) {
+    public Optional<User> changeRole(User userRequest) {
+        Optional<User> optionalUser = userRepository.findByUsername(userRequest.getUsername());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setRole(userRequest.getRole());
             userRepository.save(user);
-
+            return Optional.of(user);
+        } else {
+            // Manejar el caso en que el usuario no existe
+            return Optional.empty();
         }
-        return userRepository.findByUsername(user.getUsername());
     }
-    }
+
+    public List<User> listUsers(){return userRepository.findAll();}
+}

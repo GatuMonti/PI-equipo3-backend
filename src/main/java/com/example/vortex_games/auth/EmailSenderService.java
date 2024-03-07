@@ -3,8 +3,6 @@ package com.example.vortex_games.auth;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -34,7 +32,7 @@ public class EmailSenderService {
                             + "<h2>¡Tu cuenta ha sido creada exitosamente!</h2>"
                             + "<h3>" +
                             "Accede a ella desde este "
-                                + "<a href="+"www.vortex.com"+">Link</a> "+"</h3>"
+                                + "<a href="+"http://localhost:5173/"+">Link</a> "+"</h3>"
                             //+ "<img src='cid:Logo'/>"
                             + "</body>"
                             + "</html>";

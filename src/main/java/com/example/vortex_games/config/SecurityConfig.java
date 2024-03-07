@@ -26,8 +26,8 @@ public class SecurityConfig {
                         csrf
                         .disable())
                 .authorizeHttpRequests(authRequest ->
-                        authRequest.requestMatchers("/auth/**", "/products/search-id/**", "/products/list-products/**", "/products/search-category/**",
-                                        "/products/search-caracteristic/**").permitAll()
+                        authRequest.requestMatchers("/**"/*"/auth/**", "/products/search-id/**", "/products/list-products/**", "/products/search-category/**",
+                                        "/products/search-caracteristic/**"*/).permitAll()
                                 //.requestMatchers("/products/add-product").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )

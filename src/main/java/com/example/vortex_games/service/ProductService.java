@@ -7,7 +7,6 @@ import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.repository.CategoryRepository;
 import com.example.vortex_games.repository.CharacteristicRepository;
 import com.example.vortex_games.repository.ProductRepository;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
