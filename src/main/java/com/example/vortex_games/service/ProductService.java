@@ -3,6 +3,7 @@ package com.example.vortex_games.service;
 
 import com.example.vortex_games.entity.Category;
 import com.example.vortex_games.entity.Characteristic;
+import com.example.vortex_games.entity.Image;
 import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.repository.CategoryRepository;
 import com.example.vortex_games.repository.CharacteristicRepository;
@@ -31,7 +32,8 @@ public class ProductService {
     public Product addProduct(Product producto){
         log.info(producto);
         if(producto.getCategory().getId()==null){
-            Category categoriaVacia=new Category("Sin categoria","Producto sin categoria");
+            Image imagenSinCategoria = new Image("https://cdns-images.dzcdn.net/images/cover/c40b8889fd4153ade9bdf3808650273d/264x264.jpg");
+            Category categoriaVacia=new Category("Sin categoria","Producto sin categoria", imagenSinCategoria);
             Optional<Category> categoriaEncontrada=categoryRepository.findByTitle(categoriaVacia.getTitle());
             if(categoriaEncontrada.isEmpty()){
                 categoriaVacia=categoryRepository.save(categoriaVacia);
