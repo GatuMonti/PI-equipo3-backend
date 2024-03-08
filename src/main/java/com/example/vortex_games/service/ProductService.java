@@ -86,8 +86,12 @@ public class ProductService {
     }
 
     public void updateProduct(Product product){
-        productRepository.deleteById(product.getId());
-        this.addProduct(product);
+
+        Optional<Product> productoEncontrado = productRepository.findById(product.getId());
+        if (productoEncontrado.isPresent()) {
+            productRepository.save(product);
+        }
+
     }
 
 }
