@@ -77,10 +77,16 @@ public class ProductController {
         if(productoBuscado.isPresent()){
             productService.updateProduct(product);
             return new ResponseEntity<>("product successfully updated", HttpStatus.OK);
-        }else{
+        }
+        else{
             throw new ResourceNotFoundException("No existe un producto con el id indicado");
         }
 
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<String> accessAdmin(){
+        return new ResponseEntity<>("satisfactory access ", HttpStatus.OK);
     }
 
 }

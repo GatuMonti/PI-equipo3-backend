@@ -12,9 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -47,9 +45,22 @@ public class ProductService {
         producto.getImages().forEach(image -> image.setProduct(producto));
         return productRepository.save(producto);
     }
-    public List<Product> searchByCategory(String category) {
+
+
+   /* public List<Product> searchByCategory(String category) {
         Category categoriaEncontrada=categoryRepository.findByTitle(category).get();
          return productRepository.findByCategory(categoriaEncontrada);
+    }*/
+
+    public List<Product> searchByCategory(String category) {
+        Optional<Category> optionalCategory = categoryRepository.findByTitle(category);
+        if (optionalCategory.isPresent()) {
+            Category categoriaEncontrada = optionalCategory.get();
+            return productRepository.findByCategory(categoriaEncontrada);
+        } else {
+            // Manejar el caso en que la categoría no se encuentra en la base de datos
+            return Collections.emptyList();
+        }
     }
 
     public List<Product> searchByCharacteristic(String characteristic){
@@ -64,6 +75,8 @@ public class ProductService {
         }
         return productos;
     }
+
+
 
     public Optional<Product> searchById(Long id){
         return productRepository.findById(id);
@@ -84,5 +97,27 @@ public class ProductService {
         productRepository.deleteById(product.getId());
         this.addProduct(product);
     }
+
+
+   /* public void updateProduct(Product product) {
+        // Obtener el producto existente por su ID
+        Optional<Product> existingProductOptional = productRepository.findById(product.getId());
+
+        if (existingProductOptional.isPresent()) {
+            Product existingProduct = existingProductOptional.get();
+
+            // Actualizar los atributos del producto existente con los valores proporcionados
+            existingProduct.setName(product.getName());
+            existingProduct.setDescription(product.getDescription());
+            existingProduct.setPrice(product.getPrice());
+
+
+            // Guardar el producto actualizado
+            productRepository.save(existingProduct);
+        } else {
+            // Manejar el caso en el que el producto no existe en la base de datos
+            // Aquí puedes lanzar una excepción, registrar un mensaje de error, etc.
+        }
+    }*/
 
 }
