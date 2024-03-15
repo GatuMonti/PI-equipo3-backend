@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Table(name = "Reservas")
 @Entity
-
+@ToString
 public class Booking {
 
     @Id

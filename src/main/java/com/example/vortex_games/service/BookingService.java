@@ -1,5 +1,6 @@
 package com.example.vortex_games.service;
 
+import com.example.vortex_games.Dto.DtoBooking;
 import com.example.vortex_games.Dto.DtoFechasBusqueda;
 import com.example.vortex_games.entity.Booking;
 import com.example.vortex_games.entity.Product;
@@ -8,11 +9,13 @@ import com.example.vortex_games.exception.ResourceNotFoundException;
 import com.example.vortex_games.repository.BookingRepository;
 import com.example.vortex_games.repository.ProductRepository;
 import com.example.vortex_games.repository.UserRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
 
+import java.util.*;
+@Log4j2
 @Service
 
 public class BookingService {
@@ -28,32 +31,19 @@ public class BookingService {
 
     //Methods Manual
 
-  /* public Booking addBooking(Booking booking) {
-        Optional<User> usuarioReserva = userRepository.findByUsername(booking.getUsuario().getUsername());
-        if (usuarioReserva.isPresent()) {
-            booking.setUsuario(usuarioReserva.get());
-            Set<Product> productosEnReserva = new HashSet<>();
-            for (Product producto : booking.getProductosReservados()) {
-                Optional<Product> productoEncontrado = productRepository.findByName(producto.getName());
-                productosEnReserva.add(productoEncontrado.get());
-            }
-            booking.setProductosReservados(productosEnReserva);
-            bookingRepository.save(booking);
-            return booking;
-        }
-        return null;
-    }*/
 
-    public Booking addBooking(Booking booking) {
+    /*public Booking addBooking(Booking booking) {
         Optional<User> usuarioReserva = userRepository.findByUsername(booking.getUsuario().getUsername());
         if (usuarioReserva.isPresent()) {
             booking.setUsuario(usuarioReserva.get());
             Set<Product> productosEnReserva = new HashSet<>();
+            int contador=0;
             for (Product producto : booking.getProductosReservados()) {
                 boolean productoExistente = false;
                 for (Booking reservaExistente : this.listaReservas()) {
                     if (reservaExistente.getProductosReservados().contains(producto)) {
                         productoExistente = true;
+                        contador++;
                         break;
                     }
                 }
@@ -64,53 +54,75 @@ public class BookingService {
                 }
             }
 
-            // Verificar que las fechas de la reserva no se crucen con ninguna reserva existente
-            if (!fechasCoinciden(booking)) {
-                // Asignar los productos únicos a la reserva
+
+            if(contador>0){
+                if (!fechasCoinciden(booking)) {
+                    // Asignar los productos únicos a la reserva
+                    booking.setProductosReservados(productosEnReserva);
+                    // Guardar la reserva
+                    return bookingRepository.save(booking);
+                }
+                else{
+                    return null;
+                }
+            }
+            else{
                 booking.setProductosReservados(productosEnReserva);
-                // Guardar la reserva
                 return bookingRepository.save(booking);
             }
+
+
         }
         return null;
-    }
+    }*/
 
+    public DtoBooking addBooking(Booking booking){
 
-    private boolean fechasCoinciden(Booking newBooking) {
-        List<Booking> existingBookings = this.listaReservas();
-        for (Booking existingBooking : existingBookings) {
-            if (newBooking.getFechaInicio().isBefore(existingBooking.getFechaFin()) &&
-                    newBooking.getFechaFin().isAfter(existingBooking.getFechaInicio())) {
-                return true;
+        Optional<User> usuarioReserva = userRepository.findByUsername(booking.getUsuario().getUsername());
+        booking.setUsuario(usuarioReserva.get());
+        Set<Product> productosEnReserva = new HashSet<>();
+        DtoFechasBusqueda fechaReserva= new DtoFechasBusqueda(booking.getFechaInicio(),booking.getFechaFin());
+        for (Product producto: booking.getProductosReservados()) {
+            for (Product disponible: this.ProductosDisponibles(fechaReserva)) {
+               if(producto.getName().equals(disponible.getName())){
+                   productosEnReserva.add(disponible);
+               }
             }
         }
-        return false;
+        if(productosEnReserva.size()==booking.getProductosReservados().size()){
+            booking.setProductosReservados(productosEnReserva);
+           Booking bookingGuardado= bookingRepository.save(booking);
+            return bookingADto(bookingGuardado);
+        }
+
+        return null;
+
     }
 
-    public List<Booking> listaReservas(){
-        return bookingRepository.findAll();
+
+    public List<DtoBooking> listaReservas(){
+        List<DtoBooking> bookingsDto=new ArrayList<>();
+        for (Booking book: bookingRepository.findAll()) {
+            bookingsDto.add(bookingADto(book));
+        }
+        return  bookingsDto;
     }
-
-
 
     public List<Product> ProductosDisponibles(DtoFechasBusqueda dtoFechasBusqueda){
         List<Booking> reservas = bookingRepository.findAll();
         List<Product> productosDisponibles = new ArrayList<>();
         List<Product> productosDeLaAplicacion = productRepository.findAll();
-        // Iterar sobre todas las reservas
-        for (Booking book: reservas) {
-            // Comprobar si las fechas de inicio y fin de la reserva están fuera del rango especificado
-            if(dtoFechasBusqueda.getInicio().isAfter(book.getFechaFin()) || dtoFechasBusqueda.getFin().isBefore(book.getFechaInicio())) {
-                productosDisponibles.addAll(book.getProductosReservados());
-            }
-        }
+
         // Iterar sobre todos los productos de la aplicación
         for (Product pro: productosDeLaAplicacion ) {
             boolean productoEnReserva = false;
             // Verificar si el producto está presente en alguna reserva dentro del rango especificado
             for (Booking reserva: reservas) {
                 for (Product productoReservado: reserva.getProductosReservados()) {
-                    if(pro.getId().equals(productoReservado.getId())){
+                    // Si el producto está en alguna reserva dentro del rango, marcarlo como reservado
+                    if (pro.getId().equals(productoReservado.getId()) &&
+                            !dtoFechasBusqueda.getInicio().isAfter(reserva.getFechaFin()) &&
+                            !dtoFechasBusqueda.getFin().isBefore(reserva.getFechaInicio())) {
                         productoEnReserva = true;
                         break;
                     }
@@ -119,12 +131,26 @@ public class BookingService {
                     break;
                 }
             }
-            // Si el producto no está presente en ninguna reserva, agregarlo a la lista de productos disponibles
+            // Si el producto no está reservado en ningún momento dentro del rango de fechas, agregarlo a la lista de productos disponibles
             if (!productoEnReserva) {
                 productosDisponibles.add(pro);
             }
         }
         return productosDisponibles;
+    }
+
+    public DtoBooking bookingADto(Booking booking){
+        DtoBooking dtoBooking=new DtoBooking();
+        List<String> productos=new ArrayList<>();
+        dtoBooking.setId(booking.getId());
+        dtoBooking.setFechaInicio(booking.getFechaInicio());
+        dtoBooking.setFechaFin(booking.getFechaFin());
+        dtoBooking.setUserName(booking.getUsuario().getUsername());
+        for (Product pro: booking.getProductosReservados()) {
+            productos.add(pro.getName());
+        }
+        dtoBooking.setProductos(productos);
+        return dtoBooking;
     }
 
 

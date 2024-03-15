@@ -1,9 +1,11 @@
 package com.example.vortex_games.controller;
 
+import com.example.vortex_games.Dto.DtoBooking;
 import com.example.vortex_games.Dto.DtoFechasBusqueda;
 import com.example.vortex_games.entity.Booking;
 import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.entity.User;
+import com.example.vortex_games.exception.BadRequestException;
 import com.example.vortex_games.exception.ResourceNotFoundException;
 import com.example.vortex_games.service.BookingService;
 import com.example.vortex_games.service.UserService;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,17 +31,27 @@ public class BookingController {
     private UserService userService;
 
     @PostMapping("/add-booking")
-    public ResponseEntity<Booking> agregarBooking(@RequestBody Booking booking) throws ResourceNotFoundException{
+    public ResponseEntity<DtoBooking> agregarBooking(@RequestBody Booking booking) throws ResourceNotFoundException, BadRequestException {
         Optional<User> usuarioEncontrado= userService.buscarUsuarioPorName(booking.getUsuario().getUsername());
         if(!usuarioEncontrado.isPresent()){
             throw new ResourceNotFoundException("Usuario no existe");
         }
-        return ResponseEntity.ok(bookingService.addBooking(booking)) ;
+        else if (booking.getFechaInicio().isBefore(LocalDate.now())) {
+            throw new BadRequestException("La fecha de inicio no puede ser menor a hoy");
+        }
+        else if (booking.getFechaFin().isBefore(booking.getFechaInicio())) {
+            throw new BadRequestException("La fecha de finalizacion no puede ser menor a la fecha de inicio");
+        }
+        DtoBooking reserva=bookingService.addBooking(booking);
+        if(reserva==null){
+            throw new BadRequestException("Productos no disponibles");
+        }
+        return ResponseEntity.ok(reserva) ;
     }
 
     @GetMapping("/list-bookings")
-    public ResponseEntity<List<Booking>> listarBooking() throws ResourceNotFoundException {
-        List<Booking> reservas= bookingService.listaReservas();
+    public ResponseEntity<List<DtoBooking>> listarBooking() throws ResourceNotFoundException {
+        List<DtoBooking> reservas= bookingService.listaReservas();
         if(reservas.size()<=0){
             throw new ResourceNotFoundException("No existen reservas");
         }
@@ -48,8 +61,16 @@ public class BookingController {
     }
 
     @GetMapping("/list-productos-disponibles")
-    public ResponseEntity<List<Product>>  productosDisponibles(@RequestBody DtoFechasBusqueda dtoFechasBusqueda) throws ResourceNotFoundException{
+    public ResponseEntity<List<Product>>  productosDisponibles(@RequestBody DtoFechasBusqueda dtoFechasBusqueda) throws ResourceNotFoundException, BadRequestException {
         List<Product> productDisponible= bookingService.ProductosDisponibles(dtoFechasBusqueda);
+
+        if (dtoFechasBusqueda.getInicio().isBefore(LocalDate.now())) {
+            throw new BadRequestException("La fecha de inicio no puede ser menor a hoy");
+        }
+        else if (dtoFechasBusqueda.getFin().isBefore(dtoFechasBusqueda.getInicio())) {
+            throw new BadRequestException("La fecha de finalizacion no puede ser menor a la fecha de inicio");
+        }
+
         if(productDisponible.size()<=0){
             throw new ResourceNotFoundException("No hay productos disponibles");
         }
