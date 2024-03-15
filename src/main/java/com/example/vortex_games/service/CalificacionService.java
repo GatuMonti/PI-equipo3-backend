@@ -1,5 +1,7 @@
 package com.example.vortex_games.service;
 
+import com.example.vortex_games.Dto.DtoCalificacion;
+import com.example.vortex_games.Dto.DtoCalificacionPromedio;
 import com.example.vortex_games.entity.Calificacion;
 import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.entity.User;
@@ -28,7 +30,7 @@ public class CalificacionService {
         return calificacionRepository.findByUsuarioAndProducto(usuarioEncontrado,productoEncontrado);
     }
 
-    public Calificacion calificar(Calificacion calificacion) {
+    public DtoCalificacion calificar(Calificacion calificacion) {
         User usuarioEncontrado = userRepository.findById(calificacion.getUsuario().getId()).get();
         Product productoEncontrado = productRepository.findById(calificacion.getProducto().getId()).get();
         calificacion.setUsuario(usuarioEncontrado);
@@ -51,7 +53,25 @@ public class CalificacionService {
         productoEncontrado.setPromedioCalificaciones(calPromedio);
         productRepository.save(productoEncontrado);
 
-        return calificacionGuardada;
+        return calificacionADto(calificacionGuardada) ;
+    }
+
+    public DtoCalificacionPromedio devolverPromedio(Long id){
+        DtoCalificacionPromedio calificacionPromedio = new DtoCalificacionPromedio();
+        Product productoBuscado = productRepository.findById(id).get();
+        calificacionPromedio.setProductName(productoBuscado.getName());
+        calificacionPromedio.setCalificacionPromedio(productoBuscado.getPromedioCalificaciones());
+        return calificacionPromedio;
+
+    }
+
+    private DtoCalificacion calificacionADto(Calificacion calificacion){
+        DtoCalificacion dtoCalificacion = new DtoCalificacion();
+        dtoCalificacion.setId(calificacion.getId());
+        dtoCalificacion.setUsername(calificacion.getUsuario().getUsername());
+        dtoCalificacion.setProductoName(calificacion.getProducto().getName());
+        dtoCalificacion.setValorCalificacion(calificacion.getValor());
+        return dtoCalificacion;
     }
 
 
