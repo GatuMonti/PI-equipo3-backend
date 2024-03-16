@@ -18,4 +18,6 @@ public class UserService {
     public Optional<User> buscarUsuarioPorName(String name){
         return userRepository.findByUsername(name);
     }
+
+    public Optional<User> buscarPorId(Integer id){ return userRepository.findById(id);}
 }
