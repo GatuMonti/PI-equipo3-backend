@@ -29,7 +29,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Role role;
 
-    private List<Product> favorites;
+   
 
 
 
