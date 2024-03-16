@@ -60,7 +60,7 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/list-productos-disponibles")
+    @PostMapping("/list-productos-disponibles")
     public ResponseEntity<List<Product>>  productosDisponibles(@RequestBody DtoFechasBusqueda dtoFechasBusqueda) throws ResourceNotFoundException, BadRequestException {
         List<Product> productDisponible= bookingService.ProductosDisponibles(dtoFechasBusqueda);
 
