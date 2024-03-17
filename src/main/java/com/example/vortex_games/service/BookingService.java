@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
 import java.util.*;
 @Log4j2
 @Service
@@ -98,7 +99,6 @@ public class BookingService {
 
     }
 
-
     public List<DtoBooking> listaReservas(){
         List<DtoBooking> bookingsDto=new ArrayList<>();
         for (Booking book: bookingRepository.findAll()) {
@@ -136,6 +136,21 @@ public class BookingService {
             }
         }
         return productosDisponibles;
+    }
+
+    public List<DtoFechasBusqueda> fechasNoDisponiblesXProducto(Long productId){
+        Product productoBuscado = productRepository.findById(productId).get();
+        List<Booking> reservas = bookingRepository.findAll();
+        List<DtoFechasBusqueda> fechasReservadas = new ArrayList<>();
+        for (Booking booking: reservas){
+            DtoFechasBusqueda fechaInicioFin = new DtoFechasBusqueda();
+            if(booking.getFechaFin().isAfter(LocalDate.now()) && booking.getProductosReservados().contains(productoBuscado)){
+                fechaInicioFin.setInicio(booking.getFechaInicio());
+                fechaInicioFin.setFin(booking.getFechaFin());
+                fechasReservadas.add(fechaInicioFin);
+            }
+        }
+        return fechasReservadas;
     }
 
     public DtoBooking bookingADto(Booking booking){
