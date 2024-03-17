@@ -77,7 +77,6 @@ public class BookingService {
     }*/
 
     public DtoBooking addBooking(Booking booking){
-
         Optional<User> usuarioReserva = userRepository.findByUsername(booking.getUsuario().getUsername());
         booking.setUsuario(usuarioReserva.get());
         Set<Product> productosEnReserva = new HashSet<>();

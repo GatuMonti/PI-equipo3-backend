@@ -29,7 +29,7 @@ public class DataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-
+/*
         if(userRepository.findById(1).isEmpty()) {
             String password = passwordEncoder.encode("admin");
             userRepository.save(new User(1,"admin", password, "admin", "admin", "adminDir", Role.ADMIN));
@@ -39,6 +39,6 @@ public class DataLoader implements ApplicationRunner {
             String password2 = passwordEncoder.encode("user");
             userRepository.save(new User(2,"user", password2, "user", "user", "userDir", Role.USER));
         }
-
+*/
     }
 }
