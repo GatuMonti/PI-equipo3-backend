@@ -66,6 +66,7 @@ public class Product {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
     private List<Calificacion> calificacions;
 
+    @NonNull
     private double promedioCalificaciones=0;
 
 

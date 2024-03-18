@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.time.LocalDate;
 import java.util.*;
 @Log4j2
 @Service
@@ -77,7 +78,6 @@ public class BookingService {
     }*/
 
     public DtoBooking addBooking(Booking booking){
-
         Optional<User> usuarioReserva = userRepository.findByUsername(booking.getUsuario().getUsername());
         booking.setUsuario(usuarioReserva.get());
         Set<Product> productosEnReserva = new HashSet<>();
@@ -98,7 +98,6 @@ public class BookingService {
         return null;
 
     }
-
 
     public List<DtoBooking> listaReservas(){
         List<DtoBooking> bookingsDto=new ArrayList<>();
@@ -137,6 +136,29 @@ public class BookingService {
             }
         }
         return productosDisponibles;
+    }
+
+    public List<DtoFechasBusqueda> fechasNoDisponiblesXProducto(Long productId){
+        Product productoBuscado = productRepository.findById(productId).get();
+        List<Booking> reservas = bookingRepository.findAll();
+        List<DtoFechasBusqueda> fechasReservadas = new ArrayList<>();
+        for (Booking booking: reservas){
+            DtoFechasBusqueda fechaInicioFin = new DtoFechasBusqueda();
+            if(booking.getFechaFin().isAfter(LocalDate.now()) && booking.getProductosReservados().contains(productoBuscado)){
+                fechaInicioFin.setInicio(booking.getFechaInicio());
+                fechaInicioFin.setFin(booking.getFechaFin());
+                fechasReservadas.add(fechaInicioFin);
+            }
+        }
+        return fechasReservadas;
+    }
+
+    public List<Booking> reservasFinalizadas(){
+        List<Booking> reservasFinalizadas = new ArrayList<>();
+        for (Booking booking: bookingRepository.findAll()){
+            if(booking.getFechaFin().isBefore(LocalDate.now())) reservasFinalizadas.add(booking);
+        }
+        return reservasFinalizadas;
     }
 
     public DtoBooking bookingADto(Booking booking){

@@ -8,6 +8,7 @@ import com.example.vortex_games.entity.User;
 import com.example.vortex_games.exception.BadRequestException;
 import com.example.vortex_games.exception.ResourceNotFoundException;
 import com.example.vortex_games.service.BookingService;
+import com.example.vortex_games.service.ProductService;
 import com.example.vortex_games.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,8 @@ public class BookingController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProductService productService;
 
     @PostMapping("/add-booking")
     public ResponseEntity<DtoBooking> agregarBooking(@RequestBody Booking booking) throws ResourceNotFoundException, BadRequestException {
@@ -77,6 +80,13 @@ public class BookingController {
         else {
             return ResponseEntity.ok(productDisponible);
         }
+    }
+
+    @GetMapping("/disponibilidadXProducto/{productId}")
+    public ResponseEntity<List<DtoFechasBusqueda>> desponibilidadXProducto(@PathVariable Long productId) throws ResourceNotFoundException {
+        Optional<Product> productoBuscado = productService.searchById(productId);
+        if(productoBuscado.isEmpty()) throw new ResourceNotFoundException("No se encontro el producto");
+        return ResponseEntity.ok(bookingService.fechasNoDisponiblesXProducto(productId));
     }
 
 

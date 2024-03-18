@@ -5,13 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DtoCalificacionPromedio {
-
-    private String productName;
-    private double calificacionPromedio;
-    private long totalDeCalificaciones;
+public class DtoCalificacionRequest {
+    private String username;
+    private Long productoId;
+    private Integer valorCalificacion;
+    private String comentario;
 }
