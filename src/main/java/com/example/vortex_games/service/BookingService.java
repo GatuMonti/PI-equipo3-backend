@@ -153,6 +153,14 @@ public class BookingService {
         return fechasReservadas;
     }
 
+    public List<Booking> reservasFinalizadas(){
+        List<Booking> reservasFinalizadas = new ArrayList<>();
+        for (Booking booking: bookingRepository.findAll()){
+            if(booking.getFechaFin().isBefore(LocalDate.now())) reservasFinalizadas.add(booking);
+        }
+        return reservasFinalizadas;
+    }
+
     public DtoBooking bookingADto(Booking booking){
         DtoBooking dtoBooking=new DtoBooking();
         List<String> productos=new ArrayList<>();

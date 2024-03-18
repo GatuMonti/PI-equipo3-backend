@@ -2,9 +2,12 @@ package com.example.vortex_games.service;
 
 import com.example.vortex_games.Dto.DtoCalificacion;
 import com.example.vortex_games.Dto.DtoCalificacionPromedio;
+import com.example.vortex_games.Dto.DtoCalificacionRequest;
+import com.example.vortex_games.entity.Booking;
 import com.example.vortex_games.entity.Calificacion;
 import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.entity.User;
+import com.example.vortex_games.repository.BookingRepository;
 import com.example.vortex_games.repository.CalificacionRepository;
 import com.example.vortex_games.repository.ProductRepository;
 import com.example.vortex_games.repository.UserRepository;
@@ -23,18 +26,24 @@ public class CalificacionService {
     private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
+    @Autowired
+    private BookingService bookingService;
 
-    public List<Calificacion> buscarPorUsuarioAndProducto(Calificacion calificacion){
-        User usuarioEncontrado = userRepository.findById(calificacion.getUsuario().getId()).get();
-        Product productoEncontrado = productRepository.findById(calificacion.getProducto().getId()).get();
+    public List<Calificacion> buscarPorUsuarioAndProducto(DtoCalificacionRequest dtoCalificacionRequest){
+        User usuarioEncontrado = userRepository.findByUsername(dtoCalificacionRequest.getUsername()).get();
+        Product productoEncontrado = productRepository.findById(dtoCalificacionRequest.getProductoId()).get();
         return calificacionRepository.findByUsuarioAndProducto(usuarioEncontrado,productoEncontrado);
     }
 
-    public DtoCalificacion calificar(Calificacion calificacion) {
-        User usuarioEncontrado = userRepository.findById(calificacion.getUsuario().getId()).get();
-        Product productoEncontrado = productRepository.findById(calificacion.getProducto().getId()).get();
+    public DtoCalificacion calificar(DtoCalificacionRequest dtoCalificacionRequest) {
+        User usuarioEncontrado = userRepository.findByUsername(dtoCalificacionRequest.getUsername()).get();
+        Product productoEncontrado = productRepository.findById(dtoCalificacionRequest.getProductoId()).get();
+        Calificacion calificacion = new Calificacion();
         calificacion.setUsuario(usuarioEncontrado);
         calificacion.setProducto(productoEncontrado);
+        calificacion.setValor(dtoCalificacionRequest.getValorCalificacion());
         Calificacion calificacionGuardada = calificacionRepository.save(calificacion);
 
         //Con esta logica seteo el promedio de la calificacion en producto
@@ -63,6 +72,19 @@ public class CalificacionService {
         calificacionPromedio.setCalificacionPromedio(productoBuscado.getPromedioCalificaciones());
         return calificacionPromedio;
 
+    }
+
+    public Boolean finalizacionDeReserva(DtoCalificacionRequest dtoCalificacionRequest){
+        User usuarioEncontrado = userRepository.findByUsername(dtoCalificacionRequest.getUsername()).get();
+        Product productoEncontrado = productRepository.findById(dtoCalificacionRequest.getProductoId()).get();
+        List<Booking> reservasDeUsuarioConProducto = bookingRepository.findByUsuarioAndProductosReservados(usuarioEncontrado,productoEncontrado);
+        List<Booking> reservasFinalizadas = bookingService.reservasFinalizadas();
+        for(Booking book: reservasFinalizadas){
+            if(reservasDeUsuarioConProducto.contains(book)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private DtoCalificacion calificacionADto(Calificacion calificacion){
