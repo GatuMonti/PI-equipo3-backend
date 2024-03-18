@@ -13,4 +13,5 @@ public class DtoCalificacionPromedio {
 
     private String productName;
     private double calificacionPromedio;
+    private long totalDeCalificaciones;
 }

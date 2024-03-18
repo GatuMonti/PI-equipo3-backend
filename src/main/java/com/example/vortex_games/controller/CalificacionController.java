@@ -49,4 +49,11 @@ public class CalificacionController {
         if(productoBuscado.isEmpty()) throw new ResourceNotFoundException("No se encontro el producto");
         return ResponseEntity.ok(calificacionService.devolverPromedio(id));
     }
+
+    @GetMapping("/calificacionDeUnProducto/{productId}")
+    public ResponseEntity<List<DtoCalificacion>> calificacionDeUnProducto(@PathVariable Long productId) throws ResourceNotFoundException {
+        Optional<Product> productoBuscado = productService.searchById(productId);
+        if(productoBuscado.isEmpty()) throw new ResourceNotFoundException("El producto no existe");
+        return ResponseEntity.ok(calificacionService.listarCalificacionesPorProducto(productId));
+    }
 }

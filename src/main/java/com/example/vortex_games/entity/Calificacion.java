@@ -27,4 +27,6 @@ public class Calificacion {
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private User usuario;
+
+    private String comentario;
 }

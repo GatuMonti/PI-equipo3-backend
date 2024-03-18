@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 @Log4j2
 @Service
@@ -44,6 +45,8 @@ public class CalificacionService {
         calificacion.setUsuario(usuarioEncontrado);
         calificacion.setProducto(productoEncontrado);
         calificacion.setValor(dtoCalificacionRequest.getValorCalificacion());
+        if(dtoCalificacionRequest.getComentario()==null || dtoCalificacionRequest.getComentario().equals("")) calificacion.setComentario("Sin Comentarios");
+        else calificacion.setComentario(dtoCalificacionRequest.getComentario());
         Calificacion calificacionGuardada = calificacionRepository.save(calificacion);
 
         //Con esta logica seteo el promedio de la calificacion en producto
@@ -70,6 +73,7 @@ public class CalificacionService {
         Product productoBuscado = productRepository.findById(id).get();
         calificacionPromedio.setProductName(productoBuscado.getName());
         calificacionPromedio.setCalificacionPromedio(productoBuscado.getPromedioCalificaciones());
+        calificacionPromedio.setTotalDeCalificaciones(productoBuscado.getCalificacions().size());
         return calificacionPromedio;
 
     }
@@ -87,12 +91,23 @@ public class CalificacionService {
         return false;
     }
 
+    public List<DtoCalificacion> listarCalificacionesPorProducto(Long productId){
+        Product productoBuscado = productRepository.findById(productId).get();
+        List<Calificacion> calificacionesDelProducto = productoBuscado.getCalificacions();
+        List<DtoCalificacion> calificaciones = new ArrayList<>() ;
+        for (Calificacion calificacion : calificacionesDelProducto){
+            calificaciones.add(calificacionADto(calificacion));
+        }
+        return calificaciones;
+    }
+
     private DtoCalificacion calificacionADto(Calificacion calificacion){
         DtoCalificacion dtoCalificacion = new DtoCalificacion();
         dtoCalificacion.setId(calificacion.getId());
         dtoCalificacion.setUsername(calificacion.getUsuario().getUsername());
         dtoCalificacion.setProductoName(calificacion.getProducto().getName());
         dtoCalificacion.setValorCalificacion(calificacion.getValor());
+        dtoCalificacion.setComentario(calificacion.getComentario());
         return dtoCalificacion;
     }
 

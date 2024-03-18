@@ -14,4 +14,5 @@ public class DtoCalificacion {
     private String username;
     private String productoName;
     private Integer valorCalificacion;
+    private String comentario;
 }

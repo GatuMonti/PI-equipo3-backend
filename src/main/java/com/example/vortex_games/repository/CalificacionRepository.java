@@ -14,4 +14,5 @@ public interface CalificacionRepository extends JpaRepository<Calificacion,Long>
     List<Calificacion> findByUsuarioAndProducto(User usuario, Product producto);
 
 
+
 }
