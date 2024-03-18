@@ -6,8 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
 @Data
 @Builder
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name="user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
-public class User implements UserDetails {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue
@@ -29,8 +29,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Role role;
 
-   
 
+    public User(int i, String admin, String password, String admin1, String admin2, String adminDir, Role admin3) {
+    }
 
 
     @Override

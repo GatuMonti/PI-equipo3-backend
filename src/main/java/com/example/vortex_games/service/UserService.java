@@ -1,16 +1,15 @@
 package com.example.vortex_games.service;
 
-import com.example.vortex_games.entity.Product;
 import com.example.vortex_games.entity.User;
 import com.example.vortex_games.repository.ProductRepository;
 import com.example.vortex_games.repository.UserRepository;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+@Log4j2
 @Service
 public class UserService {
 
@@ -19,6 +18,9 @@ public class UserService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductService productService;
 
     //Methods Manual
 

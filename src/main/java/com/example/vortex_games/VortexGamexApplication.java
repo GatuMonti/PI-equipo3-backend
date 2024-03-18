@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
 public class VortexGamexApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(VortexGamexApplication.class, args);
 	}
 
