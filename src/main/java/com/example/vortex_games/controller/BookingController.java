@@ -63,7 +63,7 @@ public class BookingController {
         }
     }
 
-    @PostMapping("/list-productos-disponibles")
+   /* @PostMapping("/list-productos-disponibles")
     public ResponseEntity<List<Product>>  productosDisponibles(@RequestBody DtoFechasBusqueda dtoFechasBusqueda) throws ResourceNotFoundException, BadRequestException {
         List<Product> productDisponible= bookingService.ProductosDisponibles(dtoFechasBusqueda);
 
@@ -72,6 +72,27 @@ public class BookingController {
         }
         else if (dtoFechasBusqueda.getFin().isBefore(dtoFechasBusqueda.getInicio())) {
             throw new BadRequestException("La fecha de finalizacion no puede ser menor a la fecha de inicio");
+        }
+
+        if(productDisponible.size()<=0){
+            throw new ResourceNotFoundException("No hay productos disponibles");
+        }
+        else {
+            return ResponseEntity.ok(productDisponible);
+        }
+    }*/
+
+    @PostMapping("/list-productos-disponibles")
+    public ResponseEntity<List<Product>>  productosDisponibles(@RequestBody DtoFechasBusqueda dtoFechasBusqueda) throws ResourceNotFoundException, BadRequestException {
+        List<Product> productDisponible= bookingService.ProductosDisponibles(dtoFechasBusqueda);
+
+        LocalDate inicio = dtoFechasBusqueda.getInicio();
+        LocalDate fin = dtoFechasBusqueda.getFin();
+
+        if (inicio != null && inicio.isBefore(LocalDate.now())) {
+            throw new BadRequestException("La fecha de inicio no puede ser menor a hoy");
+        } else if (inicio != null && fin != null && fin.isBefore(inicio)) {
+            throw new BadRequestException("La fecha de finalización no puede ser menor a la fecha de inicio");
         }
 
         if(productDisponible.size()<=0){
