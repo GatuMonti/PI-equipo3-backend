@@ -108,6 +108,43 @@ public class BookingService {
         return  bookingsDto;
     }
 
+  /* public List<Product> ProductosDisponibles(DtoFechasBusqueda dtoFechasBusqueda){
+        List<Booking> reservas = bookingRepository.findAll();
+        List<Product> productosDisponibles = new ArrayList<>();
+        List<Product> productosDeLaAplicacion = productRepository.findAll();
+
+        LocalDate inicio = dtoFechasBusqueda.getInicio();
+        LocalDate fin = dtoFechasBusqueda.getFin();
+
+        if (inicio == null && fin == null) return productosDeLaAplicacion;
+
+        // Iterar sobre todos los productos de la aplicación
+        for (Product pro: productosDeLaAplicacion ) {
+            boolean productoEnReserva = false;
+            // Verificar si el producto está presente en alguna reserva dentro del rango especificado
+            for (Booking reserva: reservas) {
+                for (Product productoReservado: reserva.getProductosReservados()) {
+
+                    boolean reservaEnRango = inicio == null || fin == null ||
+                            (!inicio.isAfter(reserva.getFechaFin()) && !fin.isBefore(reserva.getFechaInicio()));
+                    // Si el producto está en alguna reserva dentro del rango, marcarlo como reservado
+                    if (pro.getId().equals(productoReservado.getId()) && reservaEnRango) {
+                        productoEnReserva = true;
+                        break;
+                    }
+                }
+                if(productoEnReserva) {
+                    break;
+                }
+            }
+            // Si el producto no está reservado en ningún momento dentro del rango de fechas, agregarlo a la lista de productos disponibles
+            if (!productoEnReserva) {
+                productosDisponibles.add(pro);
+            }
+        }
+        return productosDisponibles;
+    }*/
+
     public List<Product> ProductosDisponibles(DtoFechasBusqueda dtoFechasBusqueda){
         List<Booking> reservas = bookingRepository.findAll();
         List<Product> productosDisponibles = new ArrayList<>();
