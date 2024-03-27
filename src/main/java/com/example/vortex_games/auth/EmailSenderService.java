@@ -49,4 +49,20 @@ public class EmailSenderService {
 
     }
 
+
+    public void sendEmailReserva(String toEmail, String subject, String body) {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = null;
+        try {
+            helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(body, true); // Set true to indicate HTML content
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            // Handle exception
+        }
+        mailSender.send(message);
+    }
+
 }
