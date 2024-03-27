@@ -33,7 +33,7 @@ public class EmailSenderService {
                             + "<h2>¡Tu cuenta ha sido creada exitosamente!</h2>"
                             + "<h3>" +
                             "Accede a ella desde este "
-                            + "<a href="+"http://localhost:5173/"+">Link</a> "+"</h3>"
+                            + "<a href="+"http://despliegue-front-phi.vercel.app/"+">Link</a> "+"</h3>"
                             //+ "<img src='cid:Logo'/>"
                             + "</body>"
                             + "</html>";
