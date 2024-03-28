@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 @Log4j2
 @Service
@@ -125,7 +127,7 @@ public class BookingService {
     public void mailConfirmacionReserva(Booking bookin) {
         String emailSubject = bookin.getUsuario().getNombre() + " " + bookin.getUsuario().getApellido() + " Se registro una reserva con exito";
         StringBuilder emailBodyBuilder = new StringBuilder();
-        emailBodyBuilder.append("<html><body style=\"font-family: Arial, sans-serif; background-color: #6269d3; padding: 20px;\">");
+        emailBodyBuilder.append("<html><body style=\"font-family: Arial, sans-serif; background-color: #AC6ABA; padding: 20px;\">");
 
         // Agregar el banner al inicio del correo
         emailBodyBuilder.append("<div>");
@@ -133,6 +135,8 @@ public class BookingService {
         emailBodyBuilder.append("</div>");
 
         emailBodyBuilder.append("<h2 style=\"color: #FFFFFF;\">¡Se registró una reserva con éxito!</h2>");
+        emailBodyBuilder.append("<p style=\"color: #FFFFFF;\"><strong>Codigo de reserva:</strong>Vortex").append(bookin.getId()).append("</p>");
+        emailBodyBuilder.append("<p style=\"color: #FFFFFF;\"><strong>Fecha y Hora:</strong>").append(LocalDate.now()).append("&nbsp;&nbsp;&nbsp;").append(formatTime(LocalTime.now())).append("</p>");
         emailBodyBuilder.append("<p style=\"color: #FFFFFF;\"><strong>Usuario:</strong> ").append(bookin.getUsuario().getNombre()).append(" ").append(bookin.getUsuario().getApellido()).append("</p>");
         emailBodyBuilder.append("<p style=\"color: #FFFFFF;\"><strong>Fecha de inicio de la reserva:</strong> ").append(bookin.getFechaInicio()).append("</p>");
         emailBodyBuilder.append("<p style=\"color: #FFFFFF;\"><strong>Fecha de finalización de la reserva:</strong> ").append(bookin.getFechaFin()).append("</p>");
@@ -144,6 +148,7 @@ public class BookingService {
         emailBodyBuilder.append("</ul>");
 
         // Agregar el logo al final del correo
+        emailBodyBuilder.append("<p style=\"color: #FFFFFF\"> <strong>Contacto: </strong> vortexgames19922024@gmail.com</p>");
         emailBodyBuilder.append("<div style=\"text-align: center; margin-top: 20px;\">");
         emailBodyBuilder.append("<img src=\"https://i.ibb.co/8z7rtYc/fondoblanco.png\" alt=\"Logo\" style=\"width: 100px; height: auto;\">");
         emailBodyBuilder.append("</div>");
@@ -155,7 +160,10 @@ public class BookingService {
                 emailSubject,
                 emailBodyBuilder.toString());
     }
-
+    private String formatTime(LocalTime time){
+        DateTimeFormatter horaFormateada = DateTimeFormatter.ofPattern("HH:mm:ss");
+        return horaFormateada.format(time);
+    }
     public DtoBooking bookingADto(Booking booking){
         DtoBooking dtoBooking=new DtoBooking();
         List<DtopProductos> productos=new ArrayList<>();
